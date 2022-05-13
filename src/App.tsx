@@ -1,11 +1,14 @@
-import React from "react";
-import "./App.css";
+import { ThemeProvider } from "styled-components";
+import Content from "./layout/Content";
+import Topbar from "./layout/Topbar";
+import theme from "./shared/theme";
 
 function App() {
     return (
-        <div className="App">
-            <h1>APP BASICO</h1>
-        </div>
+        <ThemeProvider theme={theme}>
+            <Topbar />
+            <Content />
+        </ThemeProvider>
     );
 }
 
