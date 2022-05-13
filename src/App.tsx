@@ -1,14 +1,21 @@
 import { ThemeProvider } from "styled-components";
-import Content from "./layout/Content";
-import Topbar from "./layout/Topbar";
 import theme from "./shared/theme";
+
+import Listar from "../src/pages/listar/index";
+import Cadastro from "../src/pages/cadastro/index";
+
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
     return (
-        <ThemeProvider theme={theme}>
-            <Topbar />
-            <Content />
-        </ThemeProvider>
+        <BrowserRouter>
+            <ThemeProvider theme={theme}>
+                <Routes>
+                    <Route index element={<Listar />} />
+                    <Route path="/cadastro" element={<Cadastro />} />
+                </Routes>
+            </ThemeProvider>
+        </BrowserRouter>
     );
 }
 
