@@ -1,12 +1,13 @@
 import { FC, useEffect, useState } from "react";
 
-import axios from "axios";
+import axios, { Axios, AxiosResponse } from "axios";
 import api from "../../shared/api";
+import { IUsuario } from "../../shared/interfaces/interface.usuario";
 
 interface IContent {}
 
 const Content: FC<IContent> = () => {
-    const [usuarios, setUsuarios] = useState([]);
+    const [usuarios, setUsuarios] = useState<IUsuario[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
@@ -16,8 +17,10 @@ const Content: FC<IContent> = () => {
     const getUsuarios = () => {
         axios
             .get(api)
-            .then((res) => {
+            .then((res: AxiosResponse<IUsuario[]>) => {
                 setUsuarios(res.data);
+
+                console.log(res);
 
                 // [
                 //     {
