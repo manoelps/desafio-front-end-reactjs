@@ -1,12 +1,12 @@
 import { FC } from "react";
-import Input from "../../shared/components/Input";
+import Button from "../../shared/components/Button";
 
 interface IListar {}
 
 const Listar: FC<IListar> = () => {
     return (
         <>
-            <h1>Listar</h1>
+            <Button disable={true} isLoading={false} text="Cadastrar" type="submit" />
         </>
     );
 };
