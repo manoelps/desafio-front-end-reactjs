@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import globalConfig from "../../../../utils";
 
 interface IButtonMain {
     disable: boolean;
@@ -28,18 +29,22 @@ export const BotaoCadastrar = styled.button<IButtonMain>`
     justify-content: center;
     width: 100%;
     height: 45px;
-    padding: 20px;
     font-size: 14pt;
+    font-weight: bold;
+    color: ${({ disable, theme }) => (disable ? `${theme.gray4}` : `${theme.white}`)};
     border: none;
     border-radius: 50px;
-    font-weight: bold;
+
     background-color: ${({ disable, theme }) => (disable ? `${theme.gray3}` : `${theme.green}`)};
-    color: ${({ disable, theme }) => (disable ? `${theme.gray4}` : `${theme.white}`)};
+
     cursor: pointer;
 
     :hover {
         opacity: ${({ disable }) => (disable ? `100%` : `70%`)};
     }
 
-    //width: 200px;
+    @media (min-width: ${globalConfig.minWidth}) {
+        width: 200px;
+        margin: 5px 0;
+    }
 `;

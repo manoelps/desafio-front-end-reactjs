@@ -1,12 +1,12 @@
 import { FC } from "react";
-import Button from "../../shared/components/Button";
+import Formulario from "../../shared/components/Formulario";
 
 interface IListar {}
 
 const Listar: FC<IListar> = () => {
     return (
         <>
-            <Button disable={true} isLoading={false} text="Cadastrar" type="submit" />
+            <h1>Listagem</h1>
         </>
     );
 };

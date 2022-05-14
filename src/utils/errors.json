@@ -1,0 +1,19 @@
+  
+{
+    "name": {
+        "required": "Nome é um campo obrigatório"
+      },
+    "email": {
+       "required": "E-mail é um campo obrigatório",
+       "email": "O e-mail informado é inválido"
+    },
+    "cpf": {
+        "required": "CPF é um campo obrigatório",
+        "min": "O CPF informado é inválido",
+        "typeError": "O CPF informado é inválido"
+    },
+    "phone": {
+        "required": "Telefone é um campo obrigatório",
+        "matches": "O número de telefone informado é inválido"
+    }
+  }
