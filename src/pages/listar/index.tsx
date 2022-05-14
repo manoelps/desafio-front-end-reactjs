@@ -1,11 +1,12 @@
 import { FC } from "react";
+import Input from "../../shared/components/Input";
 
 interface IListar {}
 
 const Listar: FC<IListar> = () => {
     return (
         <>
-            <h1>Lista</h1>
+            <h1>Listar</h1>
         </>
     );
 };
