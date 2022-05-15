@@ -1,12 +1,14 @@
 import { FC } from "react";
 import { ItemContainer, SubItemContainer, SubItemTitle, SubItemValue, SubBody } from "./style";
 import { IUsuario } from "../../../../interfaces/interface.usuario";
+import { Link } from "react-router-dom";
 
 interface ISubItem {
     registro: IUsuario;
+    handleDeleteUser: (uuid: any) => void;
 }
 
-const SubItem: FC<ISubItem> = ({ registro }) => {
+const SubItem: FC<ISubItem> = ({ registro, handleDeleteUser }) => {
     return (
         <ItemContainer key={registro.cpf}>
             <SubBody>
@@ -23,7 +25,18 @@ const SubItem: FC<ISubItem> = ({ registro }) => {
                     <SubItemValue>{registro.phone}</SubItemValue>
                 </SubItemContainer>
                 <SubItemContainer>
-                    <div style={{ textAlign: "end" }}> editar | excluir</div>
+                    <div style={{ textAlign: "end" }}>
+                        <Link to={`/cadastrar/${registro.uuid}`} style={{ textDecoration: "none" }}>
+                            editar
+                        </Link>{" "}
+                        |{" "}
+                        <span
+                            onClick={() => handleDeleteUser(registro.uuid)}
+                            style={{ cursor: "pointer", color: "red" }}
+                        >
+                            excluir
+                        </span>
+                    </div>
                 </SubItemContainer>
             </SubBody>
         </ItemContainer>

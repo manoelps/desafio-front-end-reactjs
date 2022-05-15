@@ -1,8 +1,8 @@
 import { FC, useEffect, useState } from "react";
-import Content from "../../layout/Content";
-import { ContainerButton } from "./styles";
-import Topbar from "../../layout/Topbar";
 import { Link } from "react-router-dom";
+
+import { ContainerButton, LinkBottom } from "./styles";
+
 import Button from "../../shared/components/Button";
 import Table from "../../shared/components/Table";
 import Accordion from "../../shared/components/Accordion";
@@ -22,40 +22,31 @@ const Listar: FC<IListar> = () => {
         setUsuarios(dadosLocalStorage);
     };
 
-    // const getUsuariosLocalStorage = () => {
-    //     if (localStorage.getItem("usuarios")) {
-    //         const dadosLocalStorage: IUsuario[] = JSON.parse(localStorage.getItem("usuarios")!);
+    const handleDeleteUser = (uuid: any) => {
+        if (window.confirm("Excluir usuário selecionado?")) {
+            const novosDadosLocalStorage = usuarios.filter((item) => item.uuid !== uuid);
 
-    //         setUsuarios(usuarios);
-    //         // const buscaDadosUsuarioLocalStorage = dadosLocalStorage.find(
-    //         //     (usuarios) => usuarios.uuid === uuid
-    //         // );
-    //     }
-    // };
+            localStorage.setItem("usuarios", JSON.stringify(novosDadosLocalStorage));
 
-    useEffect(() => {
-        console.log(usuarios);
-    }, [usuarios]);
+            getUsuariosLocalStorage();
+        }
+    };
 
     return (
         <>
             <ContainerButton>
-                <Link to={"/cadastro"} style={{ textDecoration: "none" }}>
-                    <Button disable={false} isLoading={false} text={"Novo"} />
-                </Link>
+                <LinkBottom>
+                    <Link to={"/cadastrar"} style={{ textDecoration: "none" }}>
+                        <Button disable={false} isLoading={false} text={"Novo"} type="submit" />
+                    </Link>
+                </LinkBottom>
             </ContainerButton>
 
-            <Table usuarios={usuarios ? usuarios : []} />
+            <Table usuarios={usuarios ? usuarios : []} handleDeleteUser={handleDeleteUser} />
 
-            <Accordion
-                usuarioView={{
-                    uuid: "5555",
-                    name: "Joao da Silva",
-                    cpf: "26899337649",
-                    phone: "4233335555",
-                    email: "joao@joaosilva.com.br",
-                }}
-            />
+            {usuarios.map((usuarios) => (
+                <Accordion key={usuarios.uuid} usuarioView={usuarios} handleDeleteUser={handleDeleteUser} />
+            ))}
         </>
     );
 };

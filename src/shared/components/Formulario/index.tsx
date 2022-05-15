@@ -20,24 +20,26 @@ import {
 } from "./styles/index";
 import { IUsuario } from "../../interfaces/interface.usuario";
 import { normalizeCPF, normalizePhoneNumber } from "../../../utils/masks";
+import { useNavigate } from "react-router-dom";
 
 interface IFormulario {
-    uuid: string;
-    cadastrar: boolean;
+    uuid: string | undefined;
 }
 
 const schema = yup
     .object({
         uuid: yup.string().required(),
-        name: yup.string().required(),
+        name: yup.string().min(3).required(),
         cpf: yup.string().required(),
         phone: yup.string().matches(phoneNumber).required(),
         email: yup.string().email().required(),
     })
     .required();
 
-const Formulario: FC<IFormulario> = ({ cadastrar, uuid }) => {
+const Formulario: FC<IFormulario> = ({ uuid }) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    const navigate = useNavigate();
 
     const {
         register,
@@ -52,7 +54,7 @@ const Formulario: FC<IFormulario> = ({ cadastrar, uuid }) => {
     const onSubmit = (data: IUsuario) => {
         const getDadosLocalStorage: IUsuario[] = JSON.parse(localStorage.getItem("usuarios")!);
 
-        if (!cadastrar) {
+        if (uuid) {
             const novosDadosLocalStorage = getDadosLocalStorage.map((obj) =>
                 obj.uuid === uuid
                     ? { ...obj, name: nameValue, email: emailValue, cpf: cpfValue, phone: phoneValue }
@@ -66,20 +68,8 @@ const Formulario: FC<IFormulario> = ({ cadastrar, uuid }) => {
             getDadosLocalStorage.push(data);
             localStorage.setItem("usuarios", JSON.stringify(getDadosLocalStorage));
         }
-
+        animateLoading(1000);
         setIsLoading(true);
-    };
-
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            setIsLoading(false);
-        }, 2000);
-
-        return () => clearTimeout(timeout);
-    }, [isLoading]);
-
-    const onError = (error: any) => {
-        //console.log(error);
     };
 
     const uuidValue = watch("uuid");
@@ -87,6 +77,21 @@ const Formulario: FC<IFormulario> = ({ cadastrar, uuid }) => {
     const cpfValue = watch("cpf");
     const phoneValue = watch("phone");
     const emailValue = watch("email");
+
+    const animateLoading = (time: number) => {
+        const timeout = setTimeout(() => {
+            //setIsLoading(false);
+            if (!isLoading) {
+                navigate("/", { replace: true });
+            }
+        }, time);
+
+        return () => clearTimeout(timeout);
+    };
+
+    const onError = (error: any) => {
+        //console.log(error);
+    };
 
     useEffect(() => {
         setValue("phone", normalizePhoneNumber(phoneValue));
@@ -97,11 +102,7 @@ const Formulario: FC<IFormulario> = ({ cadastrar, uuid }) => {
     }, [cpfValue]);
 
     useEffect(() => {
-        // if (!localStorage.getItem("usuarios")) {
-        //     localStorage.setItem("usuarios", "[]");
-        // }
-
-        if (!cadastrar) {
+        if (uuid) {
             const dadosLocalStorage: IUsuario[] = JSON.parse(localStorage.getItem("usuarios")!);
 
             const buscaDadosUsuarioLocalStorage = dadosLocalStorage.find(
@@ -118,6 +119,10 @@ const Formulario: FC<IFormulario> = ({ cadastrar, uuid }) => {
         }
     }, []);
 
+    const handleBackPage = () => {
+        navigate("/", { replace: true });
+    };
+
     return (
         <Container>
             <form onSubmit={handleSubmit(onSubmit, onError)}>
@@ -133,7 +138,7 @@ const Formulario: FC<IFormulario> = ({ cadastrar, uuid }) => {
                                 maxLength={250}
                                 error={errors.name?.type && true}
                             />
-                            <input {...register("uuid")} type="text" name="uuid" id="uuid" readOnly />
+                            <input {...register("uuid")} type="hidden" name="uuid" id="uuid" readOnly />
                         </InputContainer>
                         {errors.name?.type && <InputError type={errors.name.type} field="name" />}
                     </InputCard>
@@ -147,7 +152,7 @@ const Formulario: FC<IFormulario> = ({ cadastrar, uuid }) => {
                                 name="email"
                                 placeholder="Ex: josesantos@gmail.com"
                                 maxLength={250}
-                                error={errors.name?.type && true}
+                                error={errors.email?.type && true}
                             />
                         </InputContainer>
                         {errors.email?.type && <InputError type={errors.email.type} field="email" />}
@@ -162,7 +167,7 @@ const Formulario: FC<IFormulario> = ({ cadastrar, uuid }) => {
                                 name="cpf"
                                 placeholder="Ex: 413.871.851-60"
                                 maxLength={14}
-                                error={errors.name?.type && true}
+                                error={errors.cpf?.type && true}
                             />
                         </InputContainer>
                         {errors.cpf?.type && <InputError type={errors.cpf.type} field="cpf" />}
@@ -184,15 +189,21 @@ const Formulario: FC<IFormulario> = ({ cadastrar, uuid }) => {
                     </InputCard>
                 </FormGridContainer>
                 <ContainerButton>
-                    {/* <Link to="/" style={{ textDecoration: "none" }}>
-                        <Button type="button" disable={false} isLoading={false} text="Cancelar" />
-                    </Link> */}
+                    <Button
+                        type="button"
+                        disable={isLoading ? true : false}
+                        isLoading={false}
+                        text={"Cancelar"}
+                        handleClick={() => {
+                            handleBackPage();
+                        }}
+                    />
 
                     <Button
                         type="submit"
                         disable={false}
                         isLoading={isLoading}
-                        text={cadastrar ? "Cadastrar" : "Salvar"}
+                        text={uuid ? "Salvar" : "Cadastrar"}
                     />
                 </ContainerButton>
             </form>

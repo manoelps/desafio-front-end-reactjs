@@ -25,9 +25,7 @@ export const FormGridContainer = styled.div`
 
 export const InputCard = styled.div``;
 
-export const InputContainer = styled.div`
-    margin-bottom: 10px;
-`;
+export const InputContainer = styled.div``;
 
 export const Title = styled.div`
     font-size: 16px;
@@ -37,6 +35,7 @@ export const Title = styled.div`
 export const InputText = styled.input<IInputText>`
     width: 100%;
     padding: 5px 0px 2px 5px;
+    margin-bottom: 10px;
     border: none;
     //border-bottom: ${({ error, theme }) => (error ? `2px solid ${theme.red}` : `2px solid ${theme.gray2}`)};
     border-bottom: ${({ error, theme }) => (error ? `1px solid ${theme.red}` : `1px solid ${theme.gray1}`)};
@@ -54,21 +53,25 @@ export const InputText = styled.input<IInputText>`
     ::placeholder {
         font-size: 15px;
         color: ${({ theme }) => theme.gray4};
+        font-weight: normal;
     }
 
     @media (min-width: ${globalConfig.minWidth}) {
         min-width: 250px;
+        margin-bottom: auto;
     }
 `;
 
 export const ContainerButton = styled.div`
     display: flex;
+    flex-direction: column-reverse;
     width: 100%;
     margin: 40px 0;
     gap: 10px;
 
     @media (min-width: ${globalConfig.minWidth}) {
         justify-content: flex-end;
+        flex-direction: row;
         margin: 30px 0;
     }
 `;

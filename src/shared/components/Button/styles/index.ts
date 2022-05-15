@@ -3,6 +3,7 @@ import globalConfig from "../../../../utils";
 
 interface IButtonMain {
     disable: boolean;
+    type?: "button" | "submit";
 }
 
 export const Loading = styled.div`
@@ -34,8 +35,10 @@ export const BotaoCadastrar = styled.button<IButtonMain>`
     color: ${({ disable, theme }) => (disable ? `${theme.gray4}` : `${theme.white}`)};
     border: none;
     border-radius: 50px;
+    //background-color: ${({ disable, theme }) => (disable ? `${theme.gray3}` : `${theme.green}`)};
 
-    background-color: ${({ disable, theme }) => (disable ? `${theme.gray3}` : `${theme.green}`)};
+    background-color: ${({ type, disable, theme }) =>
+        type === "submit" ? (disable ? `${theme.gray3}` : `${theme.green}`) : `${theme.gray}`};
 
     cursor: pointer;
 

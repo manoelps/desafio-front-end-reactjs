@@ -7,9 +7,10 @@ import { IUsuario } from "../../interfaces/interface.usuario";
 
 interface IAccordion {
     usuarioView: IUsuario;
+    handleDeleteUser: (uuid: any) => void;
 }
 
-const Accordion: FC<IAccordion> = ({ usuarioView }) => {
+const Accordion: FC<IAccordion> = ({ usuarioView, handleDeleteUser }) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     return (
@@ -20,7 +21,7 @@ const Accordion: FC<IAccordion> = ({ usuarioView }) => {
             </Title>
 
             <Body isOpen={isOpen}>
-                <SubItem key={usuarioView.cpf} registro={usuarioView} />
+                <SubItem key={usuarioView.cpf} registro={usuarioView} handleDeleteUser={handleDeleteUser} />
             </Body>
         </Container>
     );

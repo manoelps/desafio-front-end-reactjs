@@ -1,10 +1,12 @@
   
 {
     "name": {
-        "required": "Nome é um campo obrigatório"
+        "required": "Nome é um campo obrigatório",
+        "min": "Campo deve conter 3 caracteres ou mais"
       },
     "email": {
        "required": "E-mail é um campo obrigatório",
+        "min": "Campo deve conter 3 caracteres ou mais",
        "email": "O e-mail informado é inválido"
     },
     "cpf": {
@@ -14,6 +16,6 @@
     },
     "phone": {
         "required": "Telefone é um campo obrigatório",
-        "matches": "O número de telefone informado é inválido"
+        "matches": "O número de celular informado é inválido"
     }
   }
