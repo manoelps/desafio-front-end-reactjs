@@ -80,7 +80,7 @@ const Formulario: FC<IFormulario> = ({ uuid }) => {
         } else {
             if (!isLoading) {
                 const buscaDadosUsuarioLocalStorage = getDadosLocalStorage.find(
-                    (usuarios) => usuarios.cpf === values.cpf
+                    (usuarios) => maskCPFNumber(usuarios.cpf) === maskCPFNumber(values.cpf)
                 );
 
                 if (buscaDadosUsuarioLocalStorage?.cpf) {
@@ -144,7 +144,7 @@ const Formulario: FC<IFormulario> = ({ uuid }) => {
             <form onSubmit={formik.handleSubmit}>
                 <FormGridContainer>
                     <Input
-                        title={"NOME"}
+                        title={"Nome completo (sem abreviações)"}
                         type={"text"}
                         error={formik.errors.name ? true : false}
                         name={"name"}
@@ -157,7 +157,7 @@ const Formulario: FC<IFormulario> = ({ uuid }) => {
                     />
 
                     <Input
-                        title={"E-MAIL"}
+                        title={"E-mail"}
                         type={"text"}
                         error={formik.errors.email ? true : false}
                         name={"email"}
