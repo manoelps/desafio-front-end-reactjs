@@ -1,15 +1,13 @@
 import { FC } from "react";
 
-import Content from "../../layout/Content";
-import Topbar from "../../layout/Topbar";
+import Formulario from "../../shared/components/Formulario";
 
 interface ICadastro {}
 
 const Cadastro: FC<ICadastro> = () => {
     return (
         <>
-            <Topbar />
-            <Content />
+            <Formulario cadastrar={true} uuid={"c8b4af71-747e-42a1-8513-d4242c86ac74"} />
         </>
     );
 };

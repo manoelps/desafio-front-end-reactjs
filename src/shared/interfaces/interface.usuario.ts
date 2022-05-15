@@ -1,6 +1,7 @@
 export interface IUsuario {
-    name: string;
+    uuid: string | undefined;
+    name: string | undefined;
     cpf: string;
     phone: string;
-    email: string;
+    email: string | undefined;
 }

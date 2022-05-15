@@ -5,7 +5,13 @@ interface IInputText {
     error?: boolean;
 }
 
-export const Container = styled.div``;
+export const Container = styled.div`
+    padding: 30px;
+
+    @media (min-width: ${globalConfig.minWidth}) {
+        padding: 0px;
+    }
+`;
 
 export const FormGridContainer = styled.div`
     display: grid;
@@ -19,7 +25,9 @@ export const FormGridContainer = styled.div`
 
 export const InputCard = styled.div``;
 
-export const InputContainer = styled.div``;
+export const InputContainer = styled.div`
+    margin-bottom: 10px;
+`;
 
 export const Title = styled.div`
     font-size: 16px;
@@ -54,11 +62,12 @@ export const InputText = styled.input<IInputText>`
 `;
 
 export const ContainerButton = styled.div`
+    display: flex;
     width: 100%;
     margin: 40px 0;
+    gap: 10px;
 
     @media (min-width: ${globalConfig.minWidth}) {
-        display: flex;
         justify-content: flex-end;
         margin: 30px 0;
     }
