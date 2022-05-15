@@ -1,6 +1,7 @@
 import { FC } from "react";
+import InputError from "../InputError";
 
-import { InputText, Container, InputContainer, Message, Title } from "./styles/index";
+import { InputText, Container, InputContainer, Message, Title, InputCard } from "./styles/index";
 
 interface IInput {
     title: string;
@@ -8,26 +9,43 @@ interface IInput {
     type: string;
     error: boolean;
     name: string;
-    value?: string | number;
-    placeholder?: string;
+    value: string;
+    placeholder: string;
     onChange: React.ChangeEventHandler<HTMLInputElement>;
+    readOnly?: boolean;
+    maxLength?: number;
 }
 
-const Input: FC<IInput> = ({ title, message, type, error, name, value, placeholder, onChange }) => {
+const Input: FC<IInput> = ({
+    title,
+    message,
+    type,
+    error,
+    name,
+    value,
+    placeholder,
+    onChange,
+    readOnly,
+    maxLength,
+}) => {
     return (
         <Container>
-            <Title>{title}</Title>
-            <InputContainer>
-                <InputText
-                    type={type}
-                    name={name}
-                    onChange={onChange}
-                    error={error}
-                    value={value}
-                    placeholder={placeholder}
-                />
-            </InputContainer>
-            {error && <Message>{message}</Message>}
+            <InputCard>
+                <Title>{title}</Title>
+                <InputContainer>
+                    <InputText
+                        type={type}
+                        name={name}
+                        onChange={onChange}
+                        error={error}
+                        value={value}
+                        placeholder={placeholder}
+                        readOnly={readOnly}
+                        maxLength={maxLength}
+                    />
+                </InputContainer>
+                {message && <InputError message={message} />}
+            </InputCard>
         </Container>
     );
 };

@@ -1,56 +1,60 @@
 import { FC, useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { useFormik } from "formik";
 
-import { phoneNumber } from "../../../utils/validations";
-import InputError from "../InputError";
+import * as Yup from "yup";
+import { setLocale } from "yup";
+
+import { Container, FormGridContainer, ContainerButton } from "./styles/index";
+import Input from "../Input";
 import Button from "../Button";
-
-import {
-    Container,
-    FormGridContainer,
-    InputCard,
-    Title,
-    InputContainer,
-    InputText,
-    ContainerButton,
-} from "./styles/index";
-import { IUsuario } from "../../interfaces/interface.usuario";
-import { normalizeCPF, normalizePhoneNumber } from "../../../utils/masks";
+import { maskPhoneNumber, maskCPFNumber } from "../../../utils/masks";
 import { useNavigate } from "react-router-dom";
+import { IUsuario } from "../../interfaces/interface.usuario";
 
 interface IFormulario {
     uuid: string | undefined;
 }
 
-const schema = yup
-    .object({
-        name: yup.string().min(3).required(),
-        cpf: yup.string().required(),
-        phone: yup.string().matches(phoneNumber).required(),
-        email: yup.string().email().required(),
-    })
-    .required();
+setLocale({
+    mixed: {
+        required: "Campo obrigatório",
+    },
+    string: {
+        email: "Preencha um e-mail válido",
+        min: "Campo deve conter 3 caracteres ou mais",
+        matches: "O número de celular informado é inválido",
+    },
+});
+
+const validationSchema = Yup.object().shape({
+    name: Yup.string().min(3).required(),
+    cpf: Yup.string().required(),
+    phone: Yup.string().required(),
+    email: Yup.string().email().required(),
+});
 
 const Formulario: FC<IFormulario> = ({ uuid }) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const navigate = useNavigate();
 
-    const {
-        register,
-        handleSubmit,
-        watch,
-        setValue,
-        formState: { errors },
-    } = useForm<IUsuario>({
-        resolver: yupResolver(schema),
+    const formik = useFormik({
+        initialValues: {
+            name: "",
+            cpf: "",
+            phone: "",
+            email: "",
+        },
+        validationSchema,
+        onSubmit: (values) => handleBotaoSalvar(values),
     });
 
-    const onSubmit = (data: IUsuario) => {
+    const onlyNumber = (value: string) => {
+        return value.replace(/[^0-9]/g, "");
+    };
+
+    const handleBotaoSalvar = (values: { name: string; cpf: string; phone: string; email: string }) => {
         const getDadosLocalStorage: IUsuario[] = JSON.parse(localStorage.getItem("usuarios")!);
 
         if (uuid) {
@@ -58,7 +62,13 @@ const Formulario: FC<IFormulario> = ({ uuid }) => {
             } else {
                 const novosDadosLocalStorage = getDadosLocalStorage.map((obj) =>
                     obj.cpf === uuid
-                        ? { ...obj, name: nameValue, email: emailValue, cpf: cpfValue, phone: phoneValue }
+                        ? {
+                              ...obj,
+                              name: values.name,
+                              email: values.email,
+                              cpf: onlyNumber(values.cpf),
+                              phone: onlyNumber(values.phone),
+                          }
                         : obj
                 );
 
@@ -70,13 +80,21 @@ const Formulario: FC<IFormulario> = ({ uuid }) => {
         } else {
             if (!isLoading) {
                 const buscaDadosUsuarioLocalStorage = getDadosLocalStorage.find(
-                    (usuarios) => usuarios.cpf === cpfValue
+                    (usuarios) => usuarios.cpf === values.cpf
                 );
 
                 if (buscaDadosUsuarioLocalStorage?.cpf) {
                     alert("CPF/Usuário já cadastrado!");
                 } else {
-                    getDadosLocalStorage.push(data);
+                    values = {
+                        ...values,
+                        name: values.name,
+                        email: values.email,
+                        cpf: onlyNumber(values.cpf),
+                        phone: onlyNumber(values.phone),
+                    };
+
+                    getDadosLocalStorage.push(values);
                     localStorage.setItem("usuarios", JSON.stringify(getDadosLocalStorage));
                     animateLoading(1000);
                     setIsLoading(true);
@@ -85,10 +103,13 @@ const Formulario: FC<IFormulario> = ({ uuid }) => {
         }
     };
 
-    const nameValue = watch("name");
-    const cpfValue = watch("cpf");
-    const phoneValue = watch("phone");
-    const emailValue = watch("email");
+    useEffect(() => {
+        formik.setFieldValue("phone", maskPhoneNumber(formik.values.phone));
+    }, [formik.values.phone]);
+
+    useEffect(() => {
+        formik.setFieldValue("cpf", maskCPFNumber(formik.values.cpf));
+    }, [formik.values.cpf]);
 
     const animateLoading = (time: number) => {
         const timeout = setTimeout(() => {
@@ -101,28 +122,16 @@ const Formulario: FC<IFormulario> = ({ uuid }) => {
         return () => clearTimeout(timeout);
     };
 
-    const onError = (error: any) => {
-        //console.log(error);
-    };
-
-    useEffect(() => {
-        setValue("phone", normalizePhoneNumber(phoneValue));
-    }, [phoneValue]);
-
-    useEffect(() => {
-        setValue("cpf", normalizeCPF(cpfValue));
-    }, [cpfValue]);
-
     useEffect(() => {
         if (uuid) {
             const dadosLocalStorage: IUsuario[] = JSON.parse(localStorage.getItem("usuarios")!);
 
             const buscaDadosUsuarioLocalStorage = dadosLocalStorage.find((usuarios) => usuarios.cpf === uuid);
 
-            setValue("name", buscaDadosUsuarioLocalStorage?.name);
-            setValue("cpf", normalizeCPF(buscaDadosUsuarioLocalStorage?.cpf));
-            setValue("phone", normalizePhoneNumber(buscaDadosUsuarioLocalStorage?.phone));
-            setValue("email", buscaDadosUsuarioLocalStorage?.email);
+            formik.setFieldValue("name", buscaDadosUsuarioLocalStorage?.name);
+            formik.setFieldValue("cpf", maskCPFNumber(buscaDadosUsuarioLocalStorage?.cpf!));
+            formik.setFieldValue("phone", maskPhoneNumber(buscaDadosUsuarioLocalStorage?.phone!));
+            formik.setFieldValue("email", buscaDadosUsuarioLocalStorage?.email);
         }
     }, []);
 
@@ -132,69 +141,61 @@ const Formulario: FC<IFormulario> = ({ uuid }) => {
 
     return (
         <Container>
-            <form onSubmit={handleSubmit(onSubmit, onError)}>
+            <form onSubmit={formik.handleSubmit}>
                 <FormGridContainer>
-                    <InputCard>
-                        <Title>Nome completo (sem abreviações)</Title>
-                        <InputContainer>
-                            <InputText
-                                {...register("name")}
-                                type="text"
-                                name="name"
-                                placeholder="Ex: José Santos"
-                                maxLength={250}
-                                error={errors.name?.type && true}
-                            />
-                        </InputContainer>
-                        {errors.name?.type && <InputError type={errors.name.type} field="name" />}
-                    </InputCard>
+                    <Input
+                        title={"NOME"}
+                        type={"text"}
+                        error={formik.errors.name ? true : false}
+                        name={"name"}
+                        onChange={formik.handleChange}
+                        value={formik.values.name}
+                        message={formik.errors.name}
+                        readOnly={false}
+                        placeholder="Ex: José Santos"
+                        maxLength={250}
+                    />
 
-                    <InputCard>
-                        <Title>E-mail</Title>
-                        <InputContainer>
-                            <InputText
-                                {...register("email")}
-                                type="email"
-                                name="email"
-                                placeholder="Ex: josesantos@gmail.com"
-                                maxLength={250}
-                                error={errors.email?.type && true}
-                            />
-                        </InputContainer>
-                        {errors.email?.type && <InputError type={errors.email.type} field="email" />}
-                    </InputCard>
+                    <Input
+                        title={"E-MAIL"}
+                        type={"text"}
+                        error={formik.errors.email ? true : false}
+                        name={"email"}
+                        onChange={formik.handleChange}
+                        value={formik.values.email}
+                        placeholder="Ex: josesantos@gmail.com"
+                        maxLength={250}
+                        message={formik.errors.email}
+                    />
 
-                    <InputCard>
-                        <Title>CPF</Title>
-                        <InputContainer>
-                            <InputText
-                                {...register("cpf")}
-                                type="text"
-                                name="cpf"
-                                placeholder="Ex: 413.871.851-60"
-                                maxLength={14}
-                                error={errors.cpf?.type && true}
-                                readOnly={uuid ? true : false}
-                            />
-                        </InputContainer>
-                        {errors.cpf?.type && <InputError type={errors.cpf.type} field="cpf" />}
-                    </InputCard>
+                    <Input
+                        title={"CPF"}
+                        type={"text"}
+                        error={formik.errors.cpf ? true : false}
+                        name={"cpf"}
+                        onChange={formik.handleChange}
+                        value={formik.values.cpf}
+                        placeholder="Ex: 413.871.851-60"
+                        maxLength={14}
+                        message={formik.errors.cpf}
+                        readOnly={uuid ? true : false}
+                    />
 
-                    <InputCard>
-                        <Title>Telefone</Title>
-                        <InputContainer>
-                            <InputText
-                                {...register("phone")}
-                                type="text"
-                                name="phone"
-                                placeholder="Ex: (42) 99999-9999"
-                                maxLength={15}
-                                error={errors.phone?.type && true}
-                            />
-                        </InputContainer>
-                        {errors.phone?.type && <InputError type={errors.phone.type} field="phone" />}
-                    </InputCard>
+                    <Input
+                        title={"Telefone"}
+                        type={"text"}
+                        error={formik.errors.phone ? true : false}
+                        name={"phone"}
+                        onChange={formik.handleChange}
+                        value={formik.values.phone}
+                        placeholder="Ex: (42) 99999-9999"
+                        maxLength={15}
+                        message={formik.errors.phone}
+                    />
+
+                    {formik.setTouched.name}
                 </FormGridContainer>
+
                 <ContainerButton>
                     <Button
                         type="button"

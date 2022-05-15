@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import { normalizeCPF, normalizePhoneNumber } from "../../../utils/masks";
+import { maskCPFNumber, maskPhoneNumber } from "../../../utils/masks";
 import { IUsuario } from "../../interfaces/interface.usuario";
 import { CustomTable, TableHead, TableBody, TableRow, TableHeader, TableColumn } from "./styles";
 
@@ -27,8 +27,8 @@ const Table: FC<ITable> = ({ usuarios, handleDeleteUser }) => {
                     <TableRow index={index} key={index}>
                         <TableColumn style={{ textAlign: "left" }}>{name}</TableColumn>
                         <TableColumn>{email}</TableColumn>
-                        <TableColumn>{normalizeCPF(cpf)}</TableColumn>
-                        <TableColumn>{normalizePhoneNumber(phone)}</TableColumn>
+                        <TableColumn>{maskCPFNumber(cpf)}</TableColumn>
+                        <TableColumn>{maskPhoneNumber(phone)}</TableColumn>
                         <TableColumn style={{ textAlign: "right" }}>
                             <Link to={`/cadastrar/${cpf}`} style={{ textDecoration: "none", color: "blue" }}>
                                 editar

@@ -2,6 +2,7 @@ import { FC } from "react";
 import { ItemContainer, SubItemContainer, SubItemTitle, SubItemValue, SubBody } from "./style";
 import { IUsuario } from "../../../../interfaces/interface.usuario";
 import { Link } from "react-router-dom";
+import { maskCPFNumber, maskPhoneNumber } from "../../../../../utils/masks";
 
 interface ISubItem {
     registro: IUsuario;
@@ -18,11 +19,11 @@ const SubItem: FC<ISubItem> = ({ registro, handleDeleteUser }) => {
                 </SubItemContainer>
                 <SubItemContainer>
                     <SubItemTitle>CPF</SubItemTitle>
-                    <SubItemValue>{registro.cpf}</SubItemValue>
+                    <SubItemValue>{maskCPFNumber(registro.cpf)}</SubItemValue>
                 </SubItemContainer>
                 <SubItemContainer>
                     <SubItemTitle>Telefone</SubItemTitle>
-                    <SubItemValue>{registro.phone}</SubItemValue>
+                    <SubItemValue>{maskPhoneNumber(registro.phone)}</SubItemValue>
                 </SubItemContainer>
                 <SubItemContainer>
                     <div style={{ textAlign: "end" }}>
