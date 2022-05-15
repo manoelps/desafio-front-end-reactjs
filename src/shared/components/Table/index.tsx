@@ -23,19 +23,19 @@ const Table: FC<ITable> = ({ usuarios, handleDeleteUser }) => {
             </TableHead>
 
             <TableBody>
-                {usuarios.map(({ uuid, name, email, cpf, phone }, index) => (
+                {usuarios.map(({ name, email, cpf, phone }, index) => (
                     <TableRow index={index} key={index}>
                         <TableColumn style={{ textAlign: "left" }}>{name}</TableColumn>
                         <TableColumn>{email}</TableColumn>
                         <TableColumn>{normalizeCPF(cpf)}</TableColumn>
                         <TableColumn>{normalizePhoneNumber(phone)}</TableColumn>
                         <TableColumn style={{ textAlign: "right" }}>
-                            <Link to={`/cadastrar/${uuid}`} style={{ textDecoration: "none", color: "blue" }}>
+                            <Link to={`/cadastrar/${cpf}`} style={{ textDecoration: "none", color: "blue" }}>
                                 editar
                             </Link>{" "}
                             |{" "}
                             <span
-                                onClick={() => handleDeleteUser(uuid)}
+                                onClick={() => handleDeleteUser(cpf)}
                                 style={{ cursor: "pointer", color: "red" }}
                             >
                                 excluir

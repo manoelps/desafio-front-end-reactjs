@@ -3,6 +3,7 @@ import globalConfig from "../../../../utils";
 
 interface IInputText {
     error?: boolean;
+    readonly?: boolean;
 }
 
 export const Container = styled.div`
@@ -45,6 +46,8 @@ export const InputText = styled.input<IInputText>`
     font-weight: bold;
     //color: ${({ theme }) => theme.gray2};
     color: ${({ theme }) => theme.black};
+    background-color: ${({ readOnly, theme }) => readOnly && `${theme.gray2}`};
+
     :focus {
         outline: none;
         color: ${({ theme }) => theme.gray1};

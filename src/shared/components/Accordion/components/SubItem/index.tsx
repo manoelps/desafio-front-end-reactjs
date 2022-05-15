@@ -26,12 +26,12 @@ const SubItem: FC<ISubItem> = ({ registro, handleDeleteUser }) => {
                 </SubItemContainer>
                 <SubItemContainer>
                     <div style={{ textAlign: "end" }}>
-                        <Link to={`/cadastrar/${registro.uuid}`} style={{ textDecoration: "none" }}>
+                        <Link to={`/cadastrar/${registro.cpf}`} style={{ textDecoration: "none" }}>
                             editar
                         </Link>{" "}
                         |{" "}
                         <span
-                            onClick={() => handleDeleteUser(registro.uuid)}
+                            onClick={() => handleDeleteUser(registro.cpf)}
                             style={{ cursor: "pointer", color: "red" }}
                         >
                             excluir

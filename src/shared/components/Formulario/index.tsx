@@ -28,7 +28,6 @@ interface IFormulario {
 
 const schema = yup
     .object({
-        uuid: yup.string().required(),
         name: yup.string().min(3).required(),
         cpf: yup.string().required(),
         phone: yup.string().matches(phoneNumber).required(),
@@ -55,24 +54,37 @@ const Formulario: FC<IFormulario> = ({ uuid }) => {
         const getDadosLocalStorage: IUsuario[] = JSON.parse(localStorage.getItem("usuarios")!);
 
         if (uuid) {
-            const novosDadosLocalStorage = getDadosLocalStorage.map((obj) =>
-                obj.uuid === uuid
-                    ? { ...obj, name: nameValue, email: emailValue, cpf: cpfValue, phone: phoneValue }
-                    : obj
-            );
+            if (isLoading) {
+            } else {
+                const novosDadosLocalStorage = getDadosLocalStorage.map((obj) =>
+                    obj.cpf === uuid
+                        ? { ...obj, name: nameValue, email: emailValue, cpf: cpfValue, phone: phoneValue }
+                        : obj
+                );
 
-            localStorage.setItem("usuarios", JSON.stringify(novosDadosLocalStorage));
+                localStorage.setItem("usuarios", JSON.stringify(novosDadosLocalStorage));
+            }
 
-            console.log(novosDadosLocalStorage);
+            animateLoading(1000);
+            setIsLoading(true);
         } else {
-            getDadosLocalStorage.push(data);
-            localStorage.setItem("usuarios", JSON.stringify(getDadosLocalStorage));
+            if (!isLoading) {
+                const buscaDadosUsuarioLocalStorage = getDadosLocalStorage.find(
+                    (usuarios) => usuarios.cpf === cpfValue
+                );
+
+                if (buscaDadosUsuarioLocalStorage?.cpf) {
+                    alert("CPF/Usuário já cadastrado!");
+                } else {
+                    getDadosLocalStorage.push(data);
+                    localStorage.setItem("usuarios", JSON.stringify(getDadosLocalStorage));
+                    animateLoading(1000);
+                    setIsLoading(true);
+                }
+            }
         }
-        animateLoading(1000);
-        setIsLoading(true);
     };
 
-    const uuidValue = watch("uuid");
     const nameValue = watch("name");
     const cpfValue = watch("cpf");
     const phoneValue = watch("phone");
@@ -80,7 +92,7 @@ const Formulario: FC<IFormulario> = ({ uuid }) => {
 
     const animateLoading = (time: number) => {
         const timeout = setTimeout(() => {
-            //setIsLoading(false);
+            setIsLoading(false);
             if (!isLoading) {
                 navigate("/", { replace: true });
             }
@@ -105,17 +117,12 @@ const Formulario: FC<IFormulario> = ({ uuid }) => {
         if (uuid) {
             const dadosLocalStorage: IUsuario[] = JSON.parse(localStorage.getItem("usuarios")!);
 
-            const buscaDadosUsuarioLocalStorage = dadosLocalStorage.find(
-                (usuarios) => usuarios.uuid === uuid
-            );
+            const buscaDadosUsuarioLocalStorage = dadosLocalStorage.find((usuarios) => usuarios.cpf === uuid);
 
-            setValue("uuid", buscaDadosUsuarioLocalStorage?.uuid);
             setValue("name", buscaDadosUsuarioLocalStorage?.name);
             setValue("cpf", normalizeCPF(buscaDadosUsuarioLocalStorage?.cpf));
             setValue("phone", normalizePhoneNumber(buscaDadosUsuarioLocalStorage?.phone));
             setValue("email", buscaDadosUsuarioLocalStorage?.email);
-        } else {
-            setValue("uuid", uuidv4());
         }
     }, []);
 
@@ -138,7 +145,6 @@ const Formulario: FC<IFormulario> = ({ uuid }) => {
                                 maxLength={250}
                                 error={errors.name?.type && true}
                             />
-                            <input {...register("uuid")} type="hidden" name="uuid" id="uuid" readOnly />
                         </InputContainer>
                         {errors.name?.type && <InputError type={errors.name.type} field="name" />}
                     </InputCard>
@@ -168,6 +174,7 @@ const Formulario: FC<IFormulario> = ({ uuid }) => {
                                 placeholder="Ex: 413.871.851-60"
                                 maxLength={14}
                                 error={errors.cpf?.type && true}
+                                readOnly={uuid ? true : false}
                             />
                         </InputContainer>
                         {errors.cpf?.type && <InputError type={errors.cpf.type} field="cpf" />}
@@ -200,7 +207,7 @@ const Formulario: FC<IFormulario> = ({ uuid }) => {
                     />
 
                     <Button
-                        type="submit"
+                        type={"submit"}
                         disable={false}
                         isLoading={isLoading}
                         text={uuid ? "Salvar" : "Cadastrar"}
