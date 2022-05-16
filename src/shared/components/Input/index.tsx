@@ -44,7 +44,6 @@ const Input: FC<IInput> = ({
                         maxLength={maxLength}
                     />
                 </InputContainer>
-                {/* {message && <InputError message={message} />} */}
             </InputCard>
         </Container>
     );
