@@ -59,7 +59,7 @@ const Listar: FC<IListar> = () => {
         <>
             <ContainerButton>
                 <LinkBottom>
-                    <Link to={"/cadastrar"} style={{ textDecoration: "none" }}>
+                    <Link to={"/cadastrar"} style={{ textDecoration: "none" }} data-testid="botao-novo-link">
                         <Button disable={false} isLoading={false} text={"Novo"} type="submit" />
                     </Link>
                 </LinkBottom>

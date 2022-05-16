@@ -11,7 +11,7 @@ interface ITable {
 
 const Table: FC<ITable> = ({ usuarios, handleDeleteUser }) => {
     return (
-        <CustomTable>
+        <CustomTable data-testid="table">
             <TableHead>
                 <TableRow index={0}>
                     <TableHeader style={{ textAlign: "left" }}>Nome</TableHeader>
@@ -24,13 +24,17 @@ const Table: FC<ITable> = ({ usuarios, handleDeleteUser }) => {
 
             <TableBody>
                 {usuarios.map(({ name, email, cpf, phone }, index) => (
-                    <TableRow index={index} key={index}>
+                    <TableRow index={index} key={index} data-testid="table-rows">
                         <TableColumn style={{ textAlign: "left" }}>{name}</TableColumn>
                         <TableColumn>{email}</TableColumn>
                         <TableColumn>{maskCPFNumber(cpf)}</TableColumn>
                         <TableColumn>{maskPhoneNumber(phone)}</TableColumn>
                         <TableColumn style={{ textAlign: "right" }}>
-                            <Link to={`/cadastrar/${cpf}`} style={{ textDecoration: "none", color: "blue" }}>
+                            <Link
+                                to={`/cadastrar/${cpf}`}
+                                style={{ textDecoration: "none", color: "blue" }}
+                                data-testid="table-edit-link"
+                            >
                                 editar
                             </Link>{" "}
                             |{" "}

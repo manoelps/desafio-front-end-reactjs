@@ -84,7 +84,7 @@ const Formulario: FC<IFormulario> = ({ uuid }) => {
                 );
 
                 if (buscaDadosUsuarioLocalStorage?.cpf) {
-                    alert("CPF/Usuário já cadastrado!");
+                    alert("Usuário já cadastrado!");
                 } else {
                     values = {
                         ...values,
@@ -205,6 +205,7 @@ const Formulario: FC<IFormulario> = ({ uuid }) => {
                         handleClick={() => {
                             handleBackPage();
                         }}
+                        data-testid="botao-cancelar"
                     />
 
                     <Button

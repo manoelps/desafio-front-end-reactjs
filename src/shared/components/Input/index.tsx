@@ -1,7 +1,7 @@
 import { FC } from "react";
 import InputError from "../InputError";
 
-import { InputText, Container, InputContainer, Message, Title, InputCard } from "./styles/index";
+import { InputText, Container, InputContainer, Title, InputCard } from "./styles/index";
 
 interface IInput {
     title: string;

@@ -100,7 +100,7 @@ export const InputText = styled.input<IInputText>`
     }
 
     ::placeholder {
-        font-size: 15px;
+        font-size: 14px;
         color: ${({ theme }) => theme.gray4};
         font-weight: normal;
     }
