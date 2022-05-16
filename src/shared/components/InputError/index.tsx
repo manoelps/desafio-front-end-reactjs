@@ -1,14 +1,15 @@
 import { FC } from "react";
 import { FildError } from "./styles";
+import errors from "../../../utils/errors.json";
 
 interface IInputError {
-    message: string;
-    type?: string;
-    field?: string;
+    type: string;
+    field: string;
 }
 
-const InputError: FC<IInputError> = ({ message }: IInputError) => {
-    return <FildError> {message}</FildError>;
+const InputError: FC<IInputError> = ({ type, field }: IInputError) => {
+    //@ts-expect-error
+    return <FildError> {errors[field][type]}</FildError>;
 };
 
 export default InputError;

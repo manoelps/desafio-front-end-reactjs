@@ -38,13 +38,11 @@ export const InputText = styled.input<IInputText>`
     padding: 5px 0px 2px 5px;
     margin-bottom: 10px;
     border: none;
-    //border-bottom: ${({ error, theme }) => (error ? `2px solid ${theme.red}` : `2px solid ${theme.gray2}`)};
     border-bottom: ${({ error, theme }) => (error ? `1px solid ${theme.red}` : `1px solid ${theme.gray1}`)};
     box-sizing: border-box;
     resize: vertical;
     font-size: 14px;
     font-weight: bold;
-    //color: ${({ theme }) => theme.gray2};
     color: ${({ theme }) => theme.black};
     background-color: ${({ readOnly, theme }) => readOnly && `${theme.gray2}`};
 
