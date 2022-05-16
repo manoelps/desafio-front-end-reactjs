@@ -40,4 +40,15 @@ Utilizado o styled-components, a biblioteca react-hook-form para criação do fo
 
 Os dados inicialmente foram consumidos da API fornecida e posteriormente armazenados no localStorage, a partir daí, foi feito toda a manipulação dos dados armazenados, editando e acrescentando novos cadastros.
 
+## Alguns Prints demostrando a responsividade:
+
+
+![image](https://user-images.githubusercontent.com/13986633/168510952-9c19d641-1976-44aa-ba38-509e0a436191.png)
+
+![image](https://user-images.githubusercontent.com/13986633/168510610-821680f5-58f0-41de-a4e1-4ac929598ceb.png)
+
+![image](https://user-images.githubusercontent.com/13986633/168510697-6184984f-182d-432a-8738-86e13ef37ab6.png)
+
+
+
 <!-- # Desafio programação - para vaga desenvolvedor Front End -->
