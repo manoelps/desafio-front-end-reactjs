@@ -28,7 +28,7 @@
 
 ## Como rodar os testes da aplicação:
 
-Acesse ou a pasta do backend ou do frontend e execute:
+Acesse ou a pasta do frontend e execute:
 
 > yarn test
 
