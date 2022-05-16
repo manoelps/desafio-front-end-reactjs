@@ -38,6 +38,8 @@ Foi criado o projeto usando ReactJS, feito o uso de typescript para manter o có
 
 Utilizado o styled-components, a biblioteca react-hook-form para criação do formulário e a biblioteca Yup para validação, e o Axios para consumir a API fornecida.
 
+Implementando teste unitários com a biblioteca Jest.
+
 Os dados inicialmente foram consumidos da API fornecida e posteriormente armazenados no localStorage, a partir daí, foi feito toda a manipulação dos dados armazenados, editando e acrescentando novos cadastros.
 
 ## Alguns Prints demostrando a responsividade:
